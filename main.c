@@ -128,6 +128,13 @@ static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                        
 // STEP 1: Declare a ble_os_t service structure for our application
 ble_os_t m_our_service;   // static stores the variable in the statically allocated memory
 // STEP 5: Declare variable holding our service UUID
+static ble_uuid_t m_adv_uuids[] = 
+{
+    {
+        BLE_UUID_OUR_SERVICE,
+        BLE_UUID_TYPE_VENDOR_BEGIN
+    }
+};
 
 
 static void advertising_start(bool erase_bonds);
@@ -654,6 +661,8 @@ static void bsp_event_handler(bsp_event_t event)
 }
 
 
+
+
 /**@brief Function for initializing the Advertising functionality.
  */
 static void advertising_init(void)
@@ -666,7 +675,9 @@ static void advertising_init(void)
     init.advdata.name_type               = BLE_ADVDATA_FULL_NAME;
     init.advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
 	
-	// STEP 6: Declare and instantiate the scan response
+    // STEP 6: Declare and instantiate the scan response
+    init.srdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
+    init.srdata.uuids_complete.p_uuids  = m_adv_uuids; 
 	
 
     init.config.ble_adv_fast_enabled  = true;
