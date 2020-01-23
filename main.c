@@ -118,6 +118,8 @@
 
 #define DEAD_BEEF                       0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
+#define OUR_CHAR_TIMER_INTERVAL         APP_TIMER_TICKS(1000) // 1000 ms intervals
+APP_TIMER_DEF(m_our_char_timer_id);
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                         /**< Context for the Queued Write module.*/
@@ -125,9 +127,9 @@ BLE_ADVERTISING_DEF(m_advertising);                                             
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                        /**< Handle of the current connection. */
 
-// STEP 1: Declare a ble_os_t service structure for our application
+// Declare a ble_os_t service structure for our application
 ble_os_t m_our_service;   // static stores the variable in the statically allocated memory
-// STEP 5: Declare variable holding our service UUID
+// Declare variable holding our service UUID
 static ble_uuid_t m_adv_uuids[] = 
 {
     {
@@ -158,6 +160,21 @@ void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
     app_error_handler(DEAD_BEEF, line_num, p_file_name);
 }
 
+
+// This is a timer event handler
+static void timer_timeout_handler(void * p_context)
+{
+    // Update temperature and characteristic value.
+    int32_t temperature = 0;
+    sd_temp_get(&temperature);
+    NRF_LOG_INFO("our_temperature_characteristic_update()");
+    our_temperature_characteristic_update(&m_our_service, &temperature);
+    nrf_gpio_pin_toggle(LED_4);
+
+
+}
+
+
 /**@brief Function for the Timer initialization.
  *
  * @details Initializes the timer module. This creates and starts application timers.
@@ -170,13 +187,16 @@ static void timers_init(void)
 
     // Create timers.
 
+    
     /* YOUR_JOB: Create any timers to be used by the application.
                  Below is an example of how to create a timer.
                  For every new timer needed, increase the value of the macro APP_TIMER_MAX_TIMERS by
-                 one.
-       ret_code_t err_code;
-       err_code = app_timer_create(&m_app_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
-       APP_ERROR_CHECK(err_code); */
+                 one.*/
+       
+       // Initiate timer
+       
+       err_code = app_timer_create(&m_our_char_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
+       APP_ERROR_CHECK(err_code); 
 }
 
 
@@ -436,6 +456,10 @@ static void application_timers_start(void)
        err_code = app_timer_start(m_app_timer_id, TIMER_INTERVAL, NULL);
        APP_ERROR_CHECK(err_code); */
 
+       ret_code_t err_code;
+       err_code = app_timer_start(m_our_char_timer_id, OUR_CHAR_TIMER_INTERVAL, NULL);
+       APP_ERROR_CHECK(err_code);
+
 }
 
 
@@ -571,6 +595,10 @@ static void ble_stack_init(void)
 
     // Register a handler for BLE events.
     NRF_SDH_BLE_OBSERVER(m_ble_observer, APP_BLE_OBSERVER_PRIO, ble_evt_handler, NULL);
+
+    //OUR_JOB: Step 3.C Call ble_our_service_on_ble_evt() to do housekeeping of ble connections related to our service and characteristics
+    NRF_SDH_BLE_OBSERVER(m_our_service_observer, APP_BLE_OBSERVER_PRIO, ble_our_service_on_ble_evt, (void*) &m_our_service);
+
 }
 
 
@@ -778,8 +806,11 @@ int main(void)
     ble_stack_init();
     gap_params_init();
     gatt_init();
+
+
     services_init();
     advertising_init();
+
     conn_params_init();
     peer_manager_init();
 
