@@ -90,6 +90,8 @@
 #include "nrf_log_default_backends.h"
 
 
+
+
 #define DEVICE_NAME                     "OurService"                            /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME               "NordicSemiconductor"                   /**< Manufacturer. Will be passed to Device Information Service. */
 #define APP_ADV_INTERVAL                50                                      /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
@@ -118,7 +120,7 @@
 
 #define DEAD_BEEF                       0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
-#define OUR_CHAR_TIMER_INTERVAL         APP_TIMER_TICKS(1000) // 1000 ms intervals
+#define OUR_CHAR_TIMER_INTERVAL         APP_TIMER_TICKS(2000) // ms intervals
 APP_TIMER_DEF(m_our_char_timer_id);
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
@@ -167,10 +169,9 @@ static void timer_timeout_handler(void * p_context)
     // Update temperature and characteristic value.
     int32_t temperature = 0;
     sd_temp_get(&temperature);
-    NRF_LOG_INFO("our_temperature_characteristic_update()");
+    //NRF_LOG_INFO("our_temperature_characteristic_update()");
     our_temperature_characteristic_update(&m_our_service, &temperature);
     nrf_gpio_pin_toggle(LED_4);
-
 
 }
 
@@ -185,6 +186,11 @@ static void timers_init(void)
     ret_code_t err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
 
+    // Initiate timer
+       
+     err_code = app_timer_create(&m_our_char_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
+     APP_ERROR_CHECK(err_code); 
+
     // Create timers.
 
     
@@ -193,10 +199,7 @@ static void timers_init(void)
                  For every new timer needed, increase the value of the macro APP_TIMER_MAX_TIMERS by
                  one.*/
        
-       // Initiate timer
-       
-       err_code = app_timer_create(&m_our_char_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
-       APP_ERROR_CHECK(err_code); 
+
 }
 
 

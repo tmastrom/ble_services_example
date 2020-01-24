@@ -86,6 +86,9 @@ static uint32_t our_char_add(ble_os_t * p_our_service)
     memset(&char_md, 0, sizeof(char_md));
     char_md.char_props.read = 1;
     char_md.char_props.write = 1;
+    char_md.char_props.indicate = 0;
+    char_md.char_props.notify = 1;
+
 
 
     //  Step 3.A, Configuring Client Characteristic Configuration Descriptor metadata and add to char_md structure
@@ -101,6 +104,7 @@ static uint32_t our_char_add(ble_os_t * p_our_service)
     cccd_md.vloc              = BLE_GATTS_VLOC_STACK;
     char_md.p_cccd_md         = &cccd_md;
     char_md.char_props.notify = 1;
+
 
 
     // OUR_JOB: Step 2.B, Configure the attribute metadata
@@ -180,6 +184,7 @@ void our_temperature_characteristic_update(ble_os_t *p_our_service, int32_t *tem
     
     if (p_our_service->conn_handle != BLE_CONN_HANDLE_INVALID)
     {
+        //SEGGER_RTT_printf(0, "Our service has a valid handle\n");
         uint16_t          len = 4;
         ble_gatts_hvx_params_t hvx_params;          // hvx: Handle Value X where X is either indication or notification
         memset(&hvx_params, 0, sizeof(hvx_params));
