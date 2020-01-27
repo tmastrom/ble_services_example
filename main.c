@@ -90,6 +90,7 @@
 #include "nrf_log_default_backends.h"
 
 #include "ble_bas.h"
+#include "battery_voltage.h"
 
 
 
@@ -124,6 +125,10 @@
 
 #define OUR_CHAR_TIMER_INTERVAL         APP_TIMER_TICKS(2000) // ms intervals
 APP_TIMER_DEF(m_our_char_timer_id);
+
+#define BATTERY_LEVEL_MEAS_INTERVAL     APP_TIMER_TICKS(120000)               /**< Battery level measurement interval (ticks). */
+APP_TIMER_DEF(m_battery_timer_id);
+BLE_BAS_DEF(m_bas);
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                         /**< Context for the Queued Write module.*/
@@ -177,6 +182,49 @@ static void timer_timeout_handler(void * p_context)
 
 }
 
+ /*@brief Function for updating the Battery Level measurement */
+ static void battery_level_update(void)
+ {
+    ret_code_t err_code;
+
+    uint8_t battery_level;
+    uint16_t vbatt;                 // Battery voltage variable
+    battery_voltage_get(&vbatt);    // Get battery voltage
+
+    battery_level = battery_level_in_percent(vbatt);    // convert mV to % 
+    NRF_LOG_INFO("ADC result in persent: %d\r\n", battery_level);
+
+    err_code = ble_bas_battery_level_update(&m_bas, battery_level, m_conn_handle);
+    if ((err_code != NRF_SUCCESS) &&
+        (err_code != NRF_ERROR_INVALID_STATE) &&
+        (err_code != NRF_ERROR_RESOURCES) &&
+        (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
+       )
+    {
+        APP_ERROR_HANDLER(err_code);
+    }
+
+ }
+
+/**@brief Function for handling the Battery measurement timer timeout.
+ *
+ * @details This function will be called each time the battery level measurement timer expires.
+ *
+ * @param[in] p_context  Pointer used for passing some arbitrary information (context) from the
+ *                       app_start_timer() call to the timeout handler.
+ */
+ static void battery_level_meas_timeout_handler(void * p_context)
+ {
+    UNUSED_PARAMETER(p_context);
+    NRF_LOG_INFO("Battery Level timeout event");
+
+    // Check if bt is connected
+    if (m_conn_handle != BLE_CONN_HANDLE_INVALID)
+    {
+        battery_level_update();
+    }
+ }
+
 
 /**@brief Function for the Timer initialization.
  *
@@ -187,22 +235,24 @@ static void timers_init(void)
     // Initialize timer module.
     ret_code_t err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
-
-    // Initiate timer
-       
-     err_code = app_timer_create(&m_our_char_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
-     APP_ERROR_CHECK(err_code); 
-
-    // Create timers.
-
     
+    // Create timers.
+    err_code = app_timer_create(&m_our_char_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
+    APP_ERROR_CHECK(err_code); 
+
+    err_code = app_timer_create(&m_battery_timer_id, APP_TIMER_MODE_REPEATED, battery_level_meas_timeout_handler);
+    APP_ERROR_CHECK(err_code); 
+
     /* YOUR_JOB: Create any timers to be used by the application.
                  Below is an example of how to create a timer.
                  For every new timer needed, increase the value of the macro APP_TIMER_MAX_TIMERS by
                  one.*/
        
-
 }
+
+
+
+
 
 
 /**@brief Function for handling Peer Manager events.
@@ -383,6 +433,7 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
 static void services_init(void)
 {
     ret_code_t         err_code;
+    ble_bas_init_t     bas_init;
     nrf_ble_qwr_init_t qwr_init = {0};
 
     // Initialize Queued Write Module.
@@ -391,8 +442,24 @@ static void services_init(void)
     err_code = nrf_ble_qwr_init(&m_qwr, &qwr_init);
     APP_ERROR_CHECK(err_code);
 	
-    // STEP 2: Add code to initialize the services used by the application.
+    // Initialize the temp data service
     our_service_init(&m_our_service);
+
+    // Initialize the battery service
+    memset(&bas_init, 0, sizeof(bas_init));
+
+    // Here the sec level for the Battery Service can be changed/increased.
+    bas_init.bl_rd_sec        = SEC_OPEN;
+    bas_init.bl_cccd_wr_sec   = SEC_OPEN;
+    bas_init.bl_report_rd_sec = SEC_OPEN;
+ 
+    bas_init.evt_handler          = NULL;
+    bas_init.support_notification = true;
+    bas_init.p_report_ref         = NULL;
+    bas_init.initial_batt_level   = 100;
+
+    err_code = ble_bas_init(&m_bas, &bas_init);
+    APP_ERROR_CHECK(err_code);
 	
 }
 
@@ -462,7 +529,11 @@ static void application_timers_start(void)
        APP_ERROR_CHECK(err_code); */
 
        ret_code_t err_code;
+
        err_code = app_timer_start(m_our_char_timer_id, OUR_CHAR_TIMER_INTERVAL, NULL);
+       APP_ERROR_CHECK(err_code);
+
+       err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL, NULL);
        APP_ERROR_CHECK(err_code);
 
 }

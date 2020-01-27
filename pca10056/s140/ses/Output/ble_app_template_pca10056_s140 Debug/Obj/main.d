@@ -117,4 +117,6 @@ Output/ble_app_template_pca10056_s140\ Debug/Obj/main.o: \
  ../../../../../../components/libraries/memobj/nrf_memobj.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 4.40/include/stdlib.h \
  ../../../../../../components/libraries/balloc/nrf_balloc.h \
- ../../../../../../components/libraries/log/nrf_log_default_backends.h
+ ../../../../../../components/libraries/log/nrf_log_default_backends.h \
+ ../../../../../../components/ble/ble_services/ble_bas/ble_bas.h \
+ C:\Users\user\Documents\SEGGER\ Embedded\ Studio\ for\ ARM\ Projects\nRF5_SDK_15.3.0_59ac345\examples\ble_peripheral\ble_services_tutorial\battery_voltage.h
