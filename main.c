@@ -89,6 +89,8 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
+#include "ble_bas.h"
+
 
 
 
