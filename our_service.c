@@ -86,10 +86,6 @@ static uint32_t our_char_add(ble_os_t * p_our_service)
     memset(&char_md, 0, sizeof(char_md));
     char_md.char_props.read = 1;
     char_md.char_props.write = 1;
-    char_md.char_props.indicate = 0;
-    char_md.char_props.notify = 1;
-
-
 
     //  Step 3.A, Configuring Client Characteristic Configuration Descriptor metadata and add to char_md structure
     /*  Declare metadata structure for CCCD
@@ -104,7 +100,6 @@ static uint32_t our_char_add(ble_os_t * p_our_service)
     cccd_md.vloc              = BLE_GATTS_VLOC_STACK;
     char_md.p_cccd_md         = &cccd_md;
     char_md.char_props.notify = 1;
-
 
 
     // OUR_JOB: Step 2.B, Configure the attribute metadata

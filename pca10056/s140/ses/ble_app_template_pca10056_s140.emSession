@@ -9,7 +9,7 @@
   <FrameBufferWindow bufferHeight="-1" addressSpace="" addressText="" bufferWidth="-1"/>
  </FrameBufferWindow>
  <Memory1>
-  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="ble_app_template_pca10056_s140" radix="16" sizeText="" addressText=""/>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="ble_app_template_pca10056_s140" radix="16" sizeText="1" addressText="0x2003ffbc"/>
  </Memory1>
  <Memory2>
   <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="ble_app_template_pca10056_s140" radix="16" sizeText="" addressText=""/>
@@ -24,6 +24,9 @@
   <ProjectSessionItem path="ble_app_template_pca10056_s140"/>
   <ProjectSessionItem path="ble_app_template_pca10056_s140;ble_app_template_pca10056_s140"/>
   <ProjectSessionItem path="ble_app_template_pca10056_s140;ble_app_template_pca10056_s140;Application"/>
+  <ProjectSessionItem path="ble_app_template_pca10056_s140;ble_app_template_pca10056_s140;Board Support"/>
+  <ProjectSessionItem path="ble_app_template_pca10056_s140;ble_app_template_pca10056_s140;nRF_BLE"/>
+  <ProjectSessionItem path="ble_app_template_pca10056_s140;ble_app_template_pca10056_s140;nRF_Drivers"/>
   <ProjectSessionItem path="ble_app_template_pca10056_s140;ble_app_template_pca10056_s140;nRF_Libraries"/>
   <ProjectSessionItem path="ble_app_template_pca10056_s140;ble_app_template_pca10056_s140;nRF_Log"/>
   <ProjectSessionItem path="ble_app_template_pca10056_s140;ble_app_template_pca10056_s140;nRF_SoftDevice"/>
@@ -48,7 +51,8 @@
  </TraceWindow>
  <Watch1>
   <Watches active="1" update="Never">
-   <Watchpoint expression="p_app_ram_start" name="p_app_ram_start" radix="16" linenumber="175" filename="../../../../../../components/softdevice/common/nrf_sdh_ble.h"/>
+   <Watchpoint expression="char_md" name="char_md" radix="16" linenumber="85" filename="../../../our_service.c"/>
+   <Watchpoint expression="cccd_md" name="cccd_md" radix="-1" linenumber="100" filename="../../../our_service.c"/>
   </Watches>
  </Watch1>
  <Watch2>
@@ -61,20 +65,31 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="22" y="44" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../main.c" selected="0" top="30" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="60" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../our_service.h" selected="0" top="36" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="184" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../our_service.c" selected="0" top="162" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="35" y="11169" useTextEdit="1" useBinaryEdit="0" left="0" path="../config/sdk_config.h" selected="1" top="11151" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="99" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error_weak.c" selected="0" top="85" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="800" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../main.c" selected="0" top="786" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="9" y="55" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../our_service.h" selected="0" top="55" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="101" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../our_service.c" selected="0" top="73" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="6206" useTextEdit="1" useBinaryEdit="0" left="0" path="../config/sdk_config.h" selected="0" top="6184" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="32" y="87" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error_weak.c" selected="1" top="85" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="174" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/common/nrf_sdh_ble.h" selected="0" top="144" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="48" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error_handler_gcc.c" selected="0" top="32" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="104" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/common/nrf_sdh.c" selected="0" top="85" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="50" y="91" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/common/nrf_sdh.c" selected="0" top="91" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="449" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/log/src/nrf_log_frontend.c" selected="0" top="430" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="71" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_util_platform.c" selected="0" top="51" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="71" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/toolchain/cmsis/include/cmsis_gcc.h" selected="0" top="55" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="451" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/s140/headers/nrf_nvic.h" selected="0" top="429" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="124" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/common/nrf_sdh_ble.c" selected="0" top="109" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="908" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/s140/headers/nrf_soc.h" selected="0" top="893" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="15" y="263" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/s140/headers/ble_gatts.h" selected="0" top="247" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="211" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/s140/headers/ble_gatt.h" selected="0" top="195" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="92" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../integration/nrfx/legacy/nrf_drv_clock.c" selected="0" top="92" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="1687" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/fds/fds.c" selected="0" top="1687" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="631" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/ble/peer_manager/security_dispatcher.c" selected="0" top="601" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="201" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/ble/peer_manager/auth_status_tracker.c" selected="0" top="171" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="4" y="161" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/ble/common/ble_srv_common.c" selected="0" top="133" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="252" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/ble/common/ble_conn_params.c" selected="0" top="238" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="92" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../modules/nrfx/drivers/src/nrfx_clock.c" selected="0" top="64" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="113" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/pwr_mgmt/nrf_pwr_mgmt.c" selected="0" top="85" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="368" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/bsp/bsp.c" selected="0" top="368" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="ble_app_template_pca10056_s140" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="C:/Users/user/Documents/SEGGER Embedded Studio for ARM Projects/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/ble_services_tutorial" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="ble_app_template_pca10056_s140" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="C:/Users/user/Documents/SEGGER Embedded Studio for ARM Projects/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/ble_services_tutorial" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>

@@ -810,7 +810,6 @@ int main(void)
     gap_params_init();
     gatt_init();
 
-
     services_init();
     advertising_init();
 
